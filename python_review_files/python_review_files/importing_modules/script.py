@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# python3
 
 # Illustrate the value of __name__ in local and external imported
 # python scripts.
@@ -13,7 +13,8 @@ print("Inside script.py: __name__ = \"{}\"".format(__name__))
 print("*"*72)
 
 # Try both True and False:
-COMMON_NAMESPACE = True
+COMMON_NAMESPACE = False
+
 # COMMON_NAMESPACE = False
 
 if COMMON_NAMESPACE:

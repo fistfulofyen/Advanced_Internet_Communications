@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
 
 # Illustration of basic module importing with common and external
 # namespace.
 
 # Try both True and False:
-COMMON_NAMESPACE = True
+COMMON_NAMESPACE = False
 # COMMON_NAMESPACE = False
 
 if COMMON_NAMESPACE:
