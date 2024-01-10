@@ -1,4 +1,4 @@
-# python3
+#! python python_review_files\python_review_files\importing_modules\script.py
 
 # Illustrate the value of __name__ in local and external imported
 # python scripts.
