@@ -3,7 +3,7 @@
 # namespace.
 
 # Try both True and False:
-COMMON_NAMESPACE = False
+COMMON_NAMESPACE = True
 # COMMON_NAMESPACE = False
 
 if COMMON_NAMESPACE:
