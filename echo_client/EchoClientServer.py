@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 
 """
 Echo Client and Server Classes
@@ -30,17 +29,17 @@ class Server:
     # Set the server hostname used to define the server socket address
     # binding. Note that "0.0.0.0" or "" serves as INADDR_ANY. i.e.,
     # bind to all local network interfaces.
-    # HOSTNAME = "192.168.1.22" # single interface    
+    HOSTNAME = "192.168.1.22" # single interface    
     # HOSTNAME = "hornet"       # valid hostname (mapped to address/IF)
     # HOSTNAME = "localhost"    # local host (mapped to local address/IF)
     # HOSTNAME = "127.0.0.1"    # same as localhost
-    HOSTNAME = "0.0.0.0"      # All interfaces.
+    # HOSTNAME = "0.0.0.0"      # All interfaces.
     
     # Server port to bind the listen socket.
     PORT = 50000
     
     RECV_BUFFER_SIZE = 1024 # Used for recv.
-    MAX_CONNECTION_BACKLOG = 10 # Used for listen.
+    MAX_CONNECTION_BACKLOG = 10
 
     # We are sending text strings and the encoding to bytes must be
     # specified.
@@ -142,8 +141,8 @@ class Client:
     # Set the server to connect to. If the server and client are running
     # on the same machine, we can use the current hostname.
     # SERVER_HOSTNAME = socket.gethostname()
-    # SERVER_HOSTNAME = "192.168.1.22"
-    SERVER_HOSTNAME = "localhost"
+    SERVER_HOSTNAME = "192.168.1.22"
+    # SERVER_HOSTNAME = "localhost"
     
     # Try connecting to the compeng4dn4 echo server. You need to change
     # the destination port to 50007 in the connect function below.

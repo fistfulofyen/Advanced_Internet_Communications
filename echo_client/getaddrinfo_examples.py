@@ -13,7 +13,7 @@ FLAGS = 0
 
 # localhost: ipv4, ipv6 and unspec options.
 
-# """
+"""
 
 HOST = "hornet"
 
@@ -31,7 +31,7 @@ PORT = 'echo'
 
 # FLAGS = socket.AI_CANONNAME
 
-# """
+"""
 
 ########################################################################
 # Ethernet/wifi interface.
@@ -139,7 +139,7 @@ FLAGS = socket.AI_CANONNAME
 ########################################################################
 # Get info for Listen socket.
 
-"""
+#"""
 
 # HOST = "0.0.0.0" # OR
 HOST = None
@@ -159,7 +159,7 @@ PORT = 50007
 
 FLAGS = socket.AI_PASSIVE
 
-"""
+#"""
 
 ########################################################################
 

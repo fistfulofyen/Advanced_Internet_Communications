@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+
 
 """
 OwlEchoClient class to connect to Owl echo server.
