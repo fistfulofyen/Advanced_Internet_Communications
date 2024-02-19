@@ -148,8 +148,8 @@ class Client:
     # on the same machine, we can use the current hostname.
     # SERVER_HOSTNAME = socket.gethostname()
     # SERVER_HOSTNAME = "192.168.1.22"
-    SERVER_HOSTNAME = "hornet"
-    # SERVER_HOSTNAME = "localhost"
+    # SERVER_HOSTNAME = "hornet"
+    SERVER_HOSTNAME = "localhost"
     
     # Try connecting to the compeng4dn4 echo server. You need to change
     # the destination port to 50007 in the connect function below.

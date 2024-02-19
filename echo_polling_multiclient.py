@@ -68,7 +68,7 @@ class Server:
                 self.service_connected_clients()
 
                 # Periodically output the current number of connections.
-                print("{} ".format(len(self.connected_clients)), end="")
+                print("{} ".format(len(self.connected_clients)), end="\r")
                 sys.stdout.flush()
                 time.sleep(0.1) 
 
