@@ -276,7 +276,7 @@ class Server:
                     fernet = Fernet(self.csv_dict["Key"][self.student_idx].encode('utf-8'))
                     connection.sendall(fernet.encrypt(sent_bytes))
                     sent_str = sent_bytes.decode(Server.MSG_ENCODING)
-                    print(sent_bytes)
+                    # print(sent_bytes)
                 print("Sent: ", sent_str)
 
 
@@ -309,8 +309,10 @@ class Client:
     recieved_str = "" 
 
     def __init__(self):
-        self.get_socket()
-        self.connect_to_server()
+        # self.get_socket()
+        # self.connect_to_server()
+        # self.send_console_input_forever()
+        self.get_student_id_and_key()
         self.send_console_input_forever()
 
     def get_socket(self):
@@ -348,11 +350,18 @@ class Client:
     def send_console_input_forever(self):
         while True:
             try:
-                # self.get_console_input()
-                self.get_student_id_and_key()
                 self.get_command()
+                #Reconnect to server
+                self.get_socket()
+                self.connect_to_server()
+                #Send the message + check response
                 self.connection_send()
                 self.connection_receive()
+                #Close connection
+                print("Closing server connection ...")
+                self.socket.close()
+                #get next ID + Key
+                self.get_student_id_and_key()
             except (KeyboardInterrupt, EOFError):
                 print()
                 print("Closing server connection ...")
@@ -373,10 +382,10 @@ class Client:
     #Ask user to input desired student ID 
     def get_student_id_and_key(self):
         print('*'*20)
-        # self.STUDENT_ID = ""
-        # self.SECRET_KEY = ""
-        self.STUDENT_ID = "1803933"
-        self.SECRET_KEY = "M7E8erO15CIh902P8DQsHxKbOADTgEPGHdiY0MplTuY="
+        self.STUDENT_ID = ""
+        self.SECRET_KEY = ""
+        # self.STUDENT_ID = "1803933"
+        # self.SECRET_KEY = "M7E8erO15CIh902P8DQsHxKbOADTgEPGHdiY0MplTuY="
 
         #Input Student Number
         while(self.STUDENT_ID == ""):
