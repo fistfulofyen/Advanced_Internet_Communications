@@ -33,6 +33,7 @@ class Server:
             "Exam 4" : 11
 
             }
+    # for look up the column name based on its index. 
     inverse_csv_map = dict((x, y) for y, x in csv_header_map.items())
 
     user_found = False
@@ -57,7 +58,7 @@ class Server:
                 for i,entry in enumerate(line.split(',')):
                     self.csv_dict[self.inverse_csv_map[i]].append(entry.strip())
             firstline = 0
-        #print(self.csv_dict)
+        # print(self.csv_dict)
         f.close()
 
     def create_listen_socket(self):
@@ -97,7 +98,7 @@ class Server:
                 self.service_connected_clients()
 
                 # Periodically output the current number of connections.
-                print("{} ".format(len(self.connected_clients)), end="\r")
+                # print("{} ".format(len(self.connected_clients)), end="\r")
                 sys.stdout.flush()
                 time.sleep(0.1) 
 
