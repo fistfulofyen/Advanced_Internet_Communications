@@ -2,6 +2,7 @@
 note : use echo_polling_multiclient.py for starter code
 
 Server:
+    
     1) Read a csv file.
         The server prints out the data read from the CSV file, 
             e.g., “Data read from CSV file: “, followed by each row of the file. ***

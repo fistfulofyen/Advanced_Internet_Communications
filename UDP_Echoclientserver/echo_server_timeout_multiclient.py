@@ -47,7 +47,7 @@ class Server:
 
             ############################################################
             # Set the listen socket timeout.
-            self.socket.settimeout(Server.ACCEPT_TIMEOUT);
+            self.socket.settimeout(Server.ACCEPT_TIMEOUT)
             ############################################################
 
             # Set socket to listen state.
@@ -94,7 +94,7 @@ class Server:
 
             ############################################################
             # Set the listen socket timeout.
-            new_connection.settimeout(Server.RECV_TIMEOUT);
+            new_connection.settimeout(Server.RECV_TIMEOUT)
             ############################################################
             
             # Add the new connection to our connected_clients

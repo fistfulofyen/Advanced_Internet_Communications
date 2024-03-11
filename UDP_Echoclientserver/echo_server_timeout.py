@@ -22,7 +22,8 @@ from EchoClientServer import Client
 
 class Server:
 
-    HOSTNAME = "0.0.0.0"
+    # HOSTNAME = "0.0.0.0"
+    HOSTNAME = "localhost"
     PORT = 50000
 
     RECV_SIZE = 1024
@@ -54,7 +55,7 @@ class Server:
 
             ############################################################
             # Set the listen socket timeout.
-            self.socket.settimeout(Server.ACCEPT_TIMEOUT);
+            self.socket.settimeout(Server.ACCEPT_TIMEOUT)
             ############################################################
 
         except Exception as msg:
@@ -97,7 +98,7 @@ class Server:
 
         ################################################################
         # Set the recv timeout for the new socket.
-        connection.settimeout(Server.RECV_TIMEOUT);
+        connection.settimeout(Server.RECV_TIMEOUT)
         ################################################################
 
         while True:

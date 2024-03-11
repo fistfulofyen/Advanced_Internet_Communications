@@ -100,7 +100,8 @@ class Server:
     # This is the file that the client will request using a GET.
     # REMOTE_FILE_NAME = "greek.txt"
     # REMOTE_FILE_NAME = "twochars.txt"
-    REMOTE_FILE_NAME = "ocanada_greek.txt"
+    # REMOTE_FILE_NAME = "ocanada_greek.txt"
+    REMOTE_FILE_NAME = "ocanada_english.txt"
     # REMOTE_FILE_NAME = "ocanada_english.txt"
 
     def __init__(self):
@@ -185,6 +186,10 @@ class Server:
         
         # If we can't find the requested file, shutdown the connection
         # and wait for someone else.
+        '''
+        with open('your_file.txt', 'r', encoding='utf-8', errors='ignore') as file:
+            data = file.read()
+        '''
         try:
             file = open(filename, 'r').read()
         except FileNotFoundError:

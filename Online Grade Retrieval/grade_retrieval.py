@@ -359,8 +359,8 @@ class Client:
                 self.connection_send()
                 self.connection_receive()
                 #Close connection
-                print("Closing server connection ...")
-                self.socket.close()
+                # print("Closing server connection ...")
+                # self.socket.close()
                 #get next ID + Key
                 self.get_student_id_and_key()
             except (KeyboardInterrupt, EOFError):
