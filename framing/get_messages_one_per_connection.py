@@ -3,12 +3,10 @@
 ########################################################################
 # GET Messages
 #
-# In this version, the client does multiple "GET"s and does a single
-# socket.recv to obtain the response. The server randomly selects from
-# a set of message to respond with.
-#
-# Things may work depending on the client recv size, message length
-# and encoding.
+# In this version, the server immediately closes the TCP connection
+# when the message has been sent. This is used as a signal to the
+# client that the message download is complete. To do multiple GETs,
+# the client creates new TCP connections.
 #
 ########################################################################
 
@@ -16,21 +14,14 @@ import socket
 import argparse
 import time
 import sys
-#import StringSamples
+import StringSamples
 import random
-
-########################################################################
+import binascii
 
 from RecvBytes import *
 
-ENCODING = 'utf-8'
-# ENCODING = 'utf-32-le'
-
-GET_REQUEST = 'GET'
-GET_REQUEST_SIZE = len(GET_REQUEST) 
-
-GET_REQUEST_BYTES = GET_REQUEST.encode(ENCODING)
-# GET_REQUEST_BYTES_SIZE = len(GET_REQUEST_BYTES)
+GET_REQUEST = b'GET'
+GET_REQUEST_SIZE = len(GET_REQUEST)
 
 ########################################################################
 # SERVER
@@ -41,7 +32,7 @@ class Server:
     HOSTNAME = socket.gethostname()
     PORT = 50000
 
-    RECV_SIZE = 1024
+    RECV_SIZE = 100
 
     BACKLOG = 5
 
@@ -49,12 +40,14 @@ class Server:
     # one randomly and return it.
 
     MSG_LIST = [
-        "1" * 10,
-        "2" * 20,
-        "3" * 30,
-        "4" * 40,
-        "5" * 50,
+    "1" * 72,
+    "2" * 70,
+    "3" * 60,
+    "4" * 40,
+    "5" * 50,
     ]
+
+    MSG_ENCODING = "utf-8"
 
     def __init__(self):
         self.create_listen_socket()
@@ -87,36 +80,22 @@ class Server:
         print("Connection received from {}.".format(address))
 
         # If we have a valid request message ('GET' string), then send
-        # an encoded message and continue listening to the
-        # client. Otherwise, break out and accept new connections.
+        # an encoded message. Either way, close the client connection.
 
-        while True:
-            try:
-                recv_result, recv_data = recv_bytes(connection, GET_REQUEST_SIZE)
-                # recv_result, recv_data = recv_bytes(connection, GET_REQUEST_BYTES_SIZE)                
-
-                recv_data_decoded = recv_data.decode(ENCODING)
-                if recv_result and recv_data_decoded == GET_REQUEST:
-                    print("Valid GET received: sending new msg ...")
-                    # Pick a random message (file) and send it to the
-                    # client.
-                    msg = random.choice(Server.MSG_LIST)
-                    print("Sending message: \n", msg)
-                    connection.sendall(msg.encode(ENCODING))
-                    print("Sendall finished.")
-                else:
-                    # Close the client connection if an invalid
-                    # request was made or if the other end closed.
-                    print("Invalid request msg or closed connection ... closing ...")
-                    connection.close()
-                    return
-            except socket.error as msg:
-                # The socket is ok but has nothing for me.
-                print("Socket error receiving GET: ", msg)
-                return
-            except UnicodeDecodeError as msg:
-                print("Unicode decode error: ", msg)
-                return
+        recv_result, recv_data = recv_bytes(connection, GET_REQUEST_SIZE)
+        if recv_result and recv_data == GET_REQUEST:
+            # Pick a random message (file) and send it to the
+            # client.
+            msg = random.choice(Server.MSG_LIST)
+            msg_encoded = msg.encode(Server.MSG_ENCODING)
+            connection.sendall(msg_encoded)
+            print("Sent message bytes: \n", msg_encoded)
+        ########################################################
+        # Close the connection after each request is
+        # fullfilled or if an invalid request is made.
+        ########################################################
+        print("Closing connection ...")
+        connection.close()
 
 ########################################################################
 # CLIENT
@@ -124,14 +103,10 @@ class Server:
 
 class Client:
 
-    NUMBER_OF_DOWNLOADS = 3
-    
     RECV_SIZE = 1024
-    # RECV_SIZE = 10
+    NUMBER_OF_DOWNLOADS = 2
 
     def __init__(self):
-        self.get_socket()
-        self.connect_to_server()
         self.download_messages()
 
     def get_socket(self):
@@ -149,36 +124,54 @@ class Client:
             exit()
 
     def download_messages(self):
+
         # Download loop to fetch multiple messages from the server.
-        for download_number in range(Client.NUMBER_OF_DOWNLOADS):
+        for download_number in range(1, Client.NUMBER_OF_DOWNLOADS+1):
 
             # Output some status information.
             print("-" * 72)
-            print("Download number: ", download_number+1)
+            print("Download number: ", download_number)
+
+            ############################################################
+            # Create a new TCP connection for each download. We will
+            # get a new socket each time.
+            ############################################################
+            self.get_socket()
+            self.connect_to_server()
+            print("Connection to ", (Server.HOSTNAME, Server.PORT))
 
             # Send the download request string to the server.
-            print("Sending GET_REQUEST_BYTES ...")
-            self.socket.sendall(GET_REQUEST_BYTES)
+            self.socket.sendall(GET_REQUEST)
 
             # recvd_bytes is used to accumulate bytes received over the
             # connection.
-            recvd_bytes = b""
+            recvd_bytes_total = b""
             
-            # In this example, do one recv on the connection and hope
-            # for the best.
             try:
-                recvd_bytes = self.socket.recv(Client.RECV_SIZE)
-                self.print_msg(recvd_bytes)
+                ########################################################
+                # Read from the connection until the server has closed
+                # the other end. Then close this end.
+                ########################################################
+                while True:
+                    recvd_bytes = self.socket.recv(Client.RECV_SIZE)
+                    if len(recvd_bytes) == 0:
+                        # The server has completed the download and
+                        # has closed the connection. We are done.
+                        print(recvd_bytes_total.decode(Server.MSG_ENCODING))
+                        print("Closing server connection ... ")
+                        self.socket.close()
+                        break
+                    recvd_bytes_total += recvd_bytes
             except KeyboardInterrupt:
                 print()
                 sys.exit(1)
-        print("Done. Closing server connection ... ")
-        self.socket.close()
 
-    def print_msg(self, msg_bytes):
-        print("-" * 72)
-        print(msg_bytes.decode(ENCODING))
-
+            # If the socket has been closed by the server, break out
+            # and close it on this end.
+            # except socket.error as msg:
+                # print("msg")
+                # break
+        
 ########################################################################
 
 if __name__ == '__main__':

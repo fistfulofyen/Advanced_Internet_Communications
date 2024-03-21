@@ -14,7 +14,7 @@ import socket
 import argparse
 import time
 import sys
-import StringSamples
+#import StringSamples
 import random
 
 from RecvBytes import *
