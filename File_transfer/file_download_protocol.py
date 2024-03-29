@@ -105,6 +105,7 @@ def read_filelist(path):
 class Server:
     HOSTNAME = "127.0.0.1"
 
+    Port1 = 50001
     PORT = 50000
     RECV_SIZE = 1024
     BACKLOG = 5
@@ -149,7 +150,7 @@ class Server:
             # Bind to all interfaces and the agreed on broadcast port.
             self.udp_socket.bind(Server.ADDRESS_PORT)
 
-            print("Listening for service discovery messages on SDP port {} ...".format(Server.PORT))
+            print("Listening for service discovery messages on SDP port {} ...".format(Server.Port1))
         except Exception as msg:
             print(msg)
             exit(1)
@@ -658,7 +659,6 @@ class Client:
         print("message received: \n" + decoded_message)
 
     def list_client(self):
-        print('\n')
         for filename in os.listdir(self.Filepath):
             print(filename)
 
