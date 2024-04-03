@@ -322,6 +322,7 @@ class Client:
     def handle_console_input_forever(self):
         while True:
             try:
+                print("-"*25)
                 self.input_text = input("Enter Command: ")
                 if self.input_text != "":
                     print("Command Entered:", self.input_text)
