@@ -52,8 +52,8 @@ class Sender:
             # In more complex situations you may have to bind to an
             # interface.  This is to ensure that broadcasts are sent out
             # the correct interface, e.g.,
-            self.socket.bind(("192.168.1.22", 33333))
-            # self.socket.bind(("127.0.0.1", 33333))
+            #self.socket.bind(("192.168.1.22", 33333))
+            self.socket.bind(("127.0.0.1", 33333))
             ############################################################            
                 
         except Exception as msg:

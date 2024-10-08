@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+
 
 ########################################################################
 # Illustration of daemon vs non-daemon threads.
@@ -21,7 +21,7 @@ NUMBER_OF_THREADS = 5
 SLEEP_BEFORE_EXITING = False
 # SLEEP_BEFORE_EXITING = True
 
-case = 1
+case = 3
 
 if case == 1:
     RUN_EACH_THREAD_FOREVER = True

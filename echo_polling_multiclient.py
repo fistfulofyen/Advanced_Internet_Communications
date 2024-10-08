@@ -22,7 +22,7 @@ class Server:
     HOSTNAME = "0.0.0.0"
     PORT = 50000
 
-    RECV_SIZE = 256
+    RECV_SIZE = 24
     BACKLOG = 10
     
     MSG_ENCODING = "utf-8"
